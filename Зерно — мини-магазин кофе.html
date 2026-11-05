@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Зерно — интернет-магазин свежего кофе</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#f7f8fa;--surface:#fff;--ink:#16181d;--muted:#6a707c;--line:#e3e6eb;--accent:#2f5bea;--ok:#1d8a4e;--bad:#c23b3b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101216;--surface:#181b21;--ink:#eceef2;--muted:#9aa1ae;--line:#2a2e37;--accent:#7b9bff;--ok:#5fd08c;--bad:#ff8585}}
+:root[data-theme="dark"]{--bg:#101216;--surface:#181b21;--ink:#eceef2;--muted:#9aa1ae;--line:#2a2e37;--accent:#7b9bff;--ok:#5fd08c;--bad:#ff8585}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Onest,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+.bar{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:700;font-size:22px;letter-spacing:-.02em}
+.cartbtn{background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:9px 16px;font-weight:500}
+.hero{padding:36px 0 20px}
+h1{font-size:clamp(28px,6vw,42px);line-height:1.1;margin:0 0 10px;letter-spacing:-.02em}
+.hero p{margin:0;color:var(--muted);max-width:52ch}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.tools input,.tools select{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.tools input{flex:1;min-width:160px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 14px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;padding-bottom:48px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pic{height:110px;display:grid;place-items:center;font-size:44px}
+.body{padding:14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.body h3{margin:0;font-size:17px}
+.meta{color:var(--muted);font-size:14px}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px}
+.price{font-weight:700}
+.add{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-weight:500}
+.empty{grid-column:1/-1;color:var(--muted);padding:30px 0}
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:10;display:none}
+.veil.on{display:block}
+aside{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--surface);z-index:11;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+aside.on{transform:none}
+.ahead{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--line)}
+.ahead h2{margin:0;font-size:20px}
+.x{background:none;border:0;font-size:24px;line-height:1;padding:4px 8px}
+.items{flex:1;overflow:auto;padding:8px 16px}
+.item{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.item .em{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-size:22px;flex:none}
+.item .info{flex:1;min-width:0}
+.item .info b{display:block}
+.qty{display:flex;align-items:center;gap:8px;margin-top:4px}
+.qty button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--bg)}
+.rm{background:none;border:0;color:var(--muted);font-size:14px;text-decoration:underline}
+.foot{padding:16px;border-top:1px solid var(--line);display:grid;gap:8px}
+.line{display:flex;justify-content:space-between}
+.line.total{font-weight:700;font-size:18px}
+.promo{display:flex;gap:8px}
+.promo input,.form input{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}
+.promo button{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:0 14px}
+.msg{font-size:14px;color:var(--muted);min-height:20px}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.primary{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:13px;font-weight:500;width:100%}
+.primary:disabled{opacity:.4;cursor:not-allowed}
+.form{display:grid;gap:10px;padding:16px;overflow:auto}
+.form label{display:grid;gap:4px;font-size:14px;color:var(--muted)}
+.done{padding:32px 16px;text-align:center}
+.done h2{margin:0 0 8px}
+.hidden{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap bar">
+  <div class="logo">Зерно</div>
+  <button class="cartbtn" id="openCart" aria-label="Открыть корзину">Корзина · <span id="count">0</span></button>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Свежеобжаренный кофе с доставкой</h1>
+    <p>Зерно и молотый кофе от небольших обжарщиков. Бесплатная доставка от 3000 ₽. Промокод <b>COFFEE10</b> даёт скидку 10%.</p>
+  </section>
+  <div class="tools">
+    <input type="search" id="q" placeholder="Поиск по названию или стране" aria-label="Поиск">
+    <select id="sort" aria-label="Сортировка">
+      <option value="def">По умолчанию</option>
+      <option value="asc">Сначала дешёвые</option>
+      <option value="desc">Сначала дорогие</option>
+      <option value="name">По названию</option>
+    </select>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="veil" id="veil"></div>
+<aside id="panel" aria-label="Корзина" aria-hidden="true">
+  <div class="ahead"><h2 id="atitle">Корзина</h2><button class="x" id="close" aria-label="Закрыть">×</button></div>
+
+  <div id="viewCart" style="display:flex;flex-direction:column;flex:1;min-height:0">
+    <div class="items" id="items"></div>
+    <div class="foot" id="foot">
+      <div class="promo"><input id="promo" placeholder="Промокод" aria-label="Промокод"><button id="applyPromo">Применить</button></div>
+      <div class="msg" id="promoMsg"></div>
+      <div class="line"><span>Товары</span><span id="sub"></span></div>
+      <div class="line"><span>Скидка</span><span id="disc"></span></div>
+      <div class="line"><span>Доставка</span><span id="ship"></span></div>
+      <div class="line total"><span>Итого</span><span id="total"></span></div>
+      <button class="primary" id="toCheckout">Оформить заказ</button>
+    </div>
+  </div>
+
+  <form class="form hidden" id="viewForm" novalidate>
+    <label>Имя<input id="name" autocomplete="name"></label>
+    <label>Телефон<input id="phone" type="tel" autocomplete="tel" placeholder="+7 900 000-00-00"></label>
+    <label>Адрес доставки<input id="addr" autocomplete="street-address"></label>
+    <div class="msg bad" id="formMsg"></div>
+    <button class="primary" type="submit">Подтвердить заказ</button>
+    <button class="rm" type="button" id="backCart">Назад в корзину</button>
+  </form>
+
+  <div class="done hidden" id="viewDone">
+    <h2>Заказ оформлен</h2>
+    <p id="doneText" class="meta"></p>
+    <button class="primary" id="doneClose">Продолжить покупки</button>
+  </div>
+</aside>
+
+<script>
+const PRODUCTS = [
+  {id:1,name:"Эфиопия Иргачефф",cat:"Зерно",country:"Эфиопия",price:890,note:"Цитрус, жасмин",bg:"#fde8d8",e:"☕"},
+  {id:2,name:"Колумбия Супремо",cat:"Зерно",country:"Колумбия",price:760,note:"Карамель, орех",bg:"#f3e3cf",e:"☕"},
+  {id:3,name:"Бразилия Сантос",cat:"Зерно",country:"Бразилия",price:640,note:"Шоколад, мягкая кислотность",bg:"#e9ddd0",e:"☕"},
+  {id:4,name:"Кения АА",cat:"Зерно",country:"Кения",price:980,note:"Чёрная смородина",bg:"#f6dde0",e:"☕"},
+  {id:5,name:"Эспрессо-смесь",cat:"Молотый",country:"Бленд",price:690,note:"Плотное тело, какао",bg:"#e6e0f2",e:"🫘"},
+  {id:6,name:"Гватемала Антигуа",cat:"Молотый",country:"Гватемала",price:820,note:"Какао, специи",bg:"#dde9e0",e:"🫘"},
+  {id:7,name:"Фильтр-бленд",cat:"Молотый",country:"Бленд",price:610,note:"Лёгкий, ягодный",bg:"#dce8f3",e:"🫘"},
+  {id:8,name:"Воронка V60",cat:"Аксессуары",country:"Керамика",price:1450,note:"Размер 02, белая",bg:"#eeeeee",e:"🫖"},
+  {id:9,name:"Фильтры для V60 (100 шт.)",cat:"Аксессуары",country:"Бумага",price:520,note:"Белые, размер 02",bg:"#f1f1e6",e:"📄"},
+  {id:10,name:"Ручная кофемолка",cat:"Аксессуары",country:"Сталь",price:3200,note:"Жернова из керамики",bg:"#e4e7ec",e:"⚙️"}
+];
+const FREE_FROM = 3000, SHIP = 300, PROMOS = {COFFEE10:0.10};
+const $ = id => document.getElementById(id);
+const rub = n => n.toLocaleString("ru-RU") + " ₽";
+let cart = load(), cat = "Все", promo = null;
+
+function load(){ try { return JSON.parse(localStorage.getItem("cart")) || {}; } catch(e){ return {}; } }
+function save(){ try { localStorage.setItem("cart", JSON.stringify(cart)); } catch(e){} }
+
+/* каталог */
+const cats = ["Все", ...new Set(PRODUCTS.map(p => p.cat))];
+function renderChips(){
+  $("chips").innerHTML = "";
+  cats.forEach(c => {
+    const b = document.createElement("button");
+    b.className = "chip"; b.textContent = c; b.setAttribute("aria-pressed", c === cat);
+    b.onclick = () => { cat = c; renderChips(); renderGrid(); };
+    $("chips").appendChild(b);
+  });
+}
+function renderGrid(){
+  const q = $("q").value.trim().toLowerCase(), s = $("sort").value;
+  let list = PRODUCTS.filter(p => (cat === "Все" || p.cat === cat) && (p.name + " " + p.country).toLowerCase().includes(q));
+  if (s === "asc") list.sort((a,b) => a.price - b.price);
+  if (s === "desc") list.sort((a,b) => b.price - a.price);
+  if (s === "name") list.sort((a,b) => a.name.localeCompare(b.name, "ru"));
+  const g = $("grid"); g.innerHTML = "";
+  if (!list.length){ g.innerHTML = '<div class="empty">Ничего не найдено. Измените запрос или выберите другую категорию.</div>'; return; }
+  list.forEach(p => {
+    const el = document.createElement("div"); el.className = "card";
+    el.innerHTML = '<div class="pic" style="background:' + p.bg + '">' + p.e + '</div><div class="body"><h3></h3><div class="meta"></div><div class="meta"></div><div class="row"><span class="price"></span><button class="add">В корзину</button></div></div>';
+    const m = el.querySelectorAll(".meta");
+    el.querySelector("h3").textContent = p.name;
+    m[0].textContent = p.country + " · " + p.cat; m[1].textContent = p.note;
+    el.querySelector(".price").textContent = rub(p.price);
+    el.querySelector(".add").onclick = () => add(p.id);
+    g.appendChild(el);
+  });
+}
+
+/* корзина */
+function add(id){ cart[id] = (cart[id] || 0) + 1; save(); renderCart(); openPanel("cart"); }
+function setQty(id, d){ cart[id] = (cart[id] || 0) + d; if (cart[id] <= 0) delete cart[id]; save(); renderCart(); }
+function calc(){
+  const sub = Object.keys(cart).reduce((s,id) => s + PRODUCTS.find(p => p.id == id).price * cart[id], 0);
+  const disc = promo ? Math.round(sub * PROMOS[promo]) : 0;
+  const after = sub - disc;
+  const ship = !sub ? 0 : after >= FREE_FROM ? 0 : SHIP;
+  return {sub, disc, ship, total: after + ship};
+}
+function renderCart(){
+  const ids = Object.keys(cart), n = ids.reduce((s,id) => s + cart[id], 0);
+  $("count").textContent = n;
+  const box = $("items"); box.innerHTML = "";
+  if (!ids.length) box.innerHTML = '<p class="meta" style="padding:24px 0">Корзина пуста. Добавьте товары из каталога.</p>';
+  ids.forEach(id => {
+    const p = PRODUCTS.find(x => x.id == id), el = document.createElement("div");
+    el.className = "item";
+    el.innerHTML = '<div class="em" style="background:' + p.bg + '">' + p.e + '</div><div class="info"><b></b><span class="meta"></span><div class="qty"><button aria-label="Меньше">−</button><span></span><button aria-label="Больше">+</button><button class="rm">Удалить</button></div></div>';
+    el.querySelector("b").textContent = p.name;
+    el.querySelector(".meta").textContent = rub(p.price * cart[id]);
+    const b = el.querySelectorAll(".qty button");
+    el.querySelector(".qty span").textContent = cart[id];
+    b[0].onclick = () => setQty(id, -1); b[1].onclick = () => setQty(id, 1);
+    b[2].style.cssText = "width:auto;border:0;background:none"; b[2].onclick = () => setQty(id, -cart[id]);
+    box.appendChild(el);
+  });
+  const c = calc();
+  $("sub").textContent = rub(c.sub);
+  $("disc").textContent = c.disc ? "−" + rub(c.disc) : "—";
+  $("ship").textContent = !c.sub ? "—" : c.ship ? rub(c.ship) : "Бесплатно";
+  $("total").textContent = rub(c.total);
+  $("toCheckout").disabled = !ids.length;
+}
+
+/* панель */
+function openPanel(view){
+  $("panel").classList.add("on"); $("veil").classList.add("on"); $("panel").setAttribute("aria-hidden","false");
+  ["viewCart","viewForm","viewDone"].forEach(v => {
+    const on = v === "view" + view[0].toUpperCase() + view.slice(1);
+    $(v).classList.toggle("hidden", !on);
+    if (v === "viewCart") $(v).style.display = on ? "flex" : "none";
+  });
+  $("atitle").textContent = view === "cart" ? "Корзина" : view === "form" ? "Оформление" : "Спасибо";
+}
+function closePanel(){ $("panel").classList.remove("on"); $("veil").classList.remove("on"); $("panel").setAttribute("aria-hidden","true"); }
+
+$("openCart").onclick = () => openPanel("cart");
+$("close").onclick = $("veil").onclick = closePanel;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closePanel(); });
+$("toCheckout").onclick = () => openPanel("form");
+$("backCart").onclick = () => openPanel("cart");
+$("doneClose").onclick = closePanel;
+$("q").oninput = renderGrid; $("sort").onchange = renderGrid;
+
+$("applyPromo").onclick = () => {
+  const code = $("promo").value.trim().toUpperCase(), m = $("promoMsg");
+  if (PROMOS[code]){ promo = code; m.className = "msg ok"; m.textContent = "Промокод применён: −" + PROMOS[code]*100 + "%"; }
+  else { promo = null; m.className = "msg bad"; m.textContent = code ? "Такого промокода нет." : "Введите промокод."; }
+  renderCart();
+};
+
+$("viewForm").onsubmit = e => {
+  e.preventDefault();
+  const name = $("name").value.trim(), phone = $("phone").value.trim(), addr = $("addr").value.trim();
+  const digits = phone.replace(/\D/g, "");
+  let err = "";
+  if (name.length < 2) err = "Укажите имя.";
+  else if (digits.length < 10) err = "Введите телефон полностью, не меньше 10 цифр.";
+  else if (addr.length < 6) err = "Укажите адрес: город, улица, дом.";
+  $("formMsg").textContent = err;
+  if (err) return;
+  const total = calc().total, num = Math.floor(10000 + Math.random() * 90000);
+  $("doneText").textContent = "Заказ № " + num + " на сумму " + rub(total) + ". Мы позвоним по номеру " + phone + ", чтобы подтвердить доставку.";
+  cart = {}; promo = null; save(); renderCart(); $("viewForm").reset(); $("promo").value = ""; $("promoMsg").textContent = "";
+  openPanel("done");
+};
+
+renderChips(); renderGrid(); renderCart();
+</script>
+</body>
+</html>
